@@ -2,8 +2,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace ReinforcementUI
-{
+
     public class RemoteData : MonoBehaviour
     { 
 
@@ -33,7 +32,8 @@ namespace ReinforcementUI
                         SensorTileJson webVars = JsonUtility.FromJson<SensorTileJson>(webRequest.downloadHandler.text);
 
 
-                         Debug.Log("SlideNumber" + webVars.slideNumber);
+                         Debug.Log("XValue" + webVars.slideNumber);
+                         Debug.Log("YValue" + webVars.slideBrightness);
                   
 
                     }
@@ -41,4 +41,3 @@ namespace ReinforcementUI
             }
         }
     }
-}
