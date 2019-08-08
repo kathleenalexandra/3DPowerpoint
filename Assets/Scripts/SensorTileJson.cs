@@ -2,7 +2,7 @@
     public class SensorTileJson {
 
     public  int  slideNumber; 
-    public  float Rotation;
+    public  int   Rotation;
     public  float slideBrightness;
     public  bool  animationIsPlaying;
     public  bool  dismissPresentation;

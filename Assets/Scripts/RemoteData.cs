@@ -19,7 +19,7 @@ public class RemoteData : MonoBehaviour
     {
         while (true)
         {
-            using (UnityWebRequest webRequest = UnityWebRequest.Get("https://api.myjson.com/bins/jub2l"))
+            using (UnityWebRequest webRequest = UnityWebRequest.Get("https://api.myjson.com/bins/nn7gt"))
             {
 
                 yield return webRequest.SendWebRequest();
@@ -53,15 +53,21 @@ public class RemoteData : MonoBehaviour
 
                     }
 
-                    gameSlideNumber = webVars.slideNumber;
-                    Debug.Log(gameSlideNumber);
-
-                    if (webVars.Rotation != gameRotation) {
-                        Debug.Log("rotation called");
+                    else if (webVars.Rotation != gameRotation) {
+                          Debug.Log("rotation called!!! ");
                         EventManager.TriggerEvent("Rotate");
                     }
 
 
+
+                    gameSlideNumber = webVars.slideNumber;
+                    gameRotation = webVars.Rotation;
+                   
+                    Debug.Log("Slide Number" + gameSlideNumber);
+                    Debug.Log("Game Rotation" + gameRotation);
+
+
+              
 
                 }
             }
