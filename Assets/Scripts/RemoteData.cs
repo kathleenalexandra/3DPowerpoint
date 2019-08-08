@@ -3,41 +3,68 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 
-    public class RemoteData : MonoBehaviour
-    { 
+public class RemoteData : MonoBehaviour
+{
 
-        void Start()
-        {    
-            StartCoroutine("GetRequest"); 
-        }
+    private int gameSlideNumber = 0;
+    private int gameRotation = 0;
+
+    void Start()
+    {
+        StartCoroutine("GetRequest");
+    }
 
 
-        IEnumerator GetRequest()
+    IEnumerator GetRequest()
+    {
+        while (true)
         {
-            while (true)
+            using (UnityWebRequest webRequest = UnityWebRequest.Get("https://api.myjson.com/bins/jub2l"))
             {
-                using (UnityWebRequest webRequest = UnityWebRequest.Get("https://api.myjson.com/bins/jub2l"))
+
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.isNetworkError)
                 {
+                    Debug.Log("Error: " + webRequest.error);
+                }
+                else
+                {
+                    //Debug.Log(":\nReceived: " + webRequest.downloadHandler.text);
 
-                    yield return webRequest.SendWebRequest();
+                    SensorTileJson webVars = JsonUtility.FromJson<SensorTileJson>(webRequest.downloadHandler.text);
 
-                    if (webRequest.isNetworkError)
+
+                    //Debug.Log("XValue" + webVars.slideNumber);
+                    // Debug.Log("YValue" + webVars.slideBrightness);
+
+
+
+                    if (webVars.slideNumber > gameSlideNumber)
                     {
-                        Debug.Log("Error: " + webRequest.error);
+                        Debug.Log("swiped forward!"); 
+                        EventManager.TriggerEvent("SwipeFoward");
                     }
-                    else
-                    {
-                        //Debug.Log(":\nReceived: " + webRequest.downloadHandler.text);
 
-                        SensorTileJson webVars = JsonUtility.FromJson<SensorTileJson>(webRequest.downloadHandler.text);
-
-
-                         Debug.Log("XValue" + webVars.slideNumber);
-                         Debug.Log("YValue" + webVars.slideBrightness);
-                  
+                    else if (webVars.slideNumber < gameSlideNumber)
+                    {    
+                         Debug.Log("swiped backward!"); 
+                         EventManager.TriggerEvent("SwipeBackward");
 
                     }
+
+                    gameSlideNumber = webVars.slideNumber;
+                    Debug.Log(gameSlideNumber);
+
+                    if (webVars.Rotation != gameRotation) {
+                        Debug.Log("rotation called");
+                        EventManager.TriggerEvent("Rotate");
+                    }
+
+
+
                 }
             }
         }
     }
+}
